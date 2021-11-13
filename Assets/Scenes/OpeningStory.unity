@@ -478,7 +478,7 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 5587508526012830677, guid: d52d3ce00cc14c54aabe02a909a5aa35, type: 2}
     value: {fileID: 463833802}
-  - key: {fileID: 2145657584269305426, guid: d52d3ce00cc14c54aabe02a909a5aa35, type: 2}
+  - key: {fileID: 0}
     value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
@@ -577,7 +577,9 @@ PlayableDirector:
   m_SceneBindings:
   - key: {fileID: 5587508526012830677, guid: d52d3ce00cc14c54aabe02a909a5aa35, type: 2}
     value: {fileID: 463833802}
-  - key: {fileID: 2145657584269305426, guid: d52d3ce00cc14c54aabe02a909a5aa35, type: 2}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: -8167333515529455959, guid: d52d3ce00cc14c54aabe02a909a5aa35, type: 2}
     value: {fileID: 2077297842}
   m_ExposedReferences:
     m_References: []
@@ -625,6 +627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412c5652ca810f94baf270d1494adf06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneNames:
+  - GameplayManagers
+  - OpeningArea
 --- !u!4 &2077297844
 Transform:
   m_ObjectHideFlags: 0
