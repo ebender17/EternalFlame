@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,17 +8,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSoundEventChannelSO _playMusicEvent = default;
     [SerializeField] private AudioSoundEventChannelSO _playSFXEvent = default;
     //[SerializeField] private AudioSoundsEventChannelSO _playSFXRandomEvent = default;
-    //TODO: Issue here. Cannot end music with Unity's pool class as we cannot get a reference to the name on the audioclip for each AudioSource in the pool. 
-    //May have to go to old script unless we can just kill all sounds.
     //[SerializeField] private AudioSoundEventChannelSO _endMusicEvent = default;
 
-    private ObjectPool<AudioSource> _pool;
+    [SerializeField]
+    private int objectPoolLength = 20;
 
-    private void Start()
-    {
-        //Creating pool of audio sources for sounds to play from
-        _pool = new ObjectPool<AudioSource>(CreatedPooledObject, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, false, 10);
-    }
+    [SerializeField]
+    private bool logSounds = false;
+
+    private List<AudioSource> pool = new List<AudioSource>();
 
     private void OnEnable()
     {
@@ -36,38 +33,69 @@ public class AudioManager : MonoBehaviour
         //_endMusicEvent.OnEventRaised -= FindSoundToRelease;
     }
 
-    private AudioSource CreatedPooledObject()
+    private void Awake()
     {
-        AudioSource audioSource = new AudioSource();
-        audioSource.name = "Audio Source";
-        audioSource.gameObject.SetActive(false);
 
-        return audioSource;
+        for (int i = 0; i < objectPoolLength; i++)
+        {
+            GameObject soundObject = new GameObject();
+            soundObject.transform.SetParent(transform);
+            soundObject.name = "Sound Effect";
+            AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+            audioSource.gameObject.SetActive(false);
+            pool.Add(audioSource);
+        }
     }
 
-    //Call when an item is taken from the pool using Get
-    void OnTakeFromPool(AudioSource audioSource)
+    public void PlaySound(Sound audio)
     {
-        audioSource.gameObject.SetActive(true);
-    }
+        if (!audio.clip)
+        {
+            Debug.Log("Clip is null!");
+            return;
+        }
 
-    private IEnumerator ReturnToPool(AudioSource obj, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        _pool.Release(obj);
-    }
+        if (logSounds)
+        {
+            Debug.Log("Playing Audio: " + audio.name);
+        }
 
-    //Called when an item is taken from the pool using Release
-    void OnReturnedToPool(AudioSource audioSource)
-    {
-        audioSource.gameObject.SetActive(false);
-    }
+        for (int i = 0; i < pool.Count; i++)
+        {
+            //Picks first audio source not active in the scene
+            if (!pool[i].gameObject.activeInHierarchy)
+            {
+                SetSource(pool[i], audio);
 
-    //If the pool capacity is reached then any items returned will be destroyed.
-    //Here we destroy the GameObject.
-    private void OnDestroyPoolObject(AudioSource audioSource)
-    {
-        Destroy(audioSource.gameObject);
+                pool[i].name = audio.name;
+                pool[i].transform.position = transform.position;
+                pool[i].gameObject.SetActive(true);
+                pool[i].Play();
+
+                if (!audio.loop)
+                    StartCoroutine(ReturnToPool(pool[i].gameObject, audio.clip.length));
+
+                return;
+            }
+        }
+
+        //If we run out of objects in the pool, create another audio source
+        GameObject soundObject = new GameObject();
+        soundObject.transform.SetParent(transform);
+        soundObject.name = audio.name;
+        //soundObject.name = "Sound Effect";
+
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        pool.Add(audioSource);
+
+        SetSource(audioSource, audio);
+
+        soundObject.transform.position = transform.position;
+        audioSource.Play();
+
+        if (!audio.loop)
+            StartCoroutine(ReturnToPool(soundObject, audio.clip.length));
+
     }
 
     private void SetSource(AudioSource source, Sound audio)
@@ -77,22 +105,40 @@ public class AudioManager : MonoBehaviour
         source.volume = audio.volume;
         source.loop = audio.loop;
         source.outputAudioMixerGroup = audio.audioMixerGroup;
+
     }
 
-    private void PlaySound(Sound audio)
+    public void SelectSound(Sound[] clips)
     {
-        AudioSource audioSource = _pool.Get();
+        Sound audio = GetRandomClip(clips);
+        PlaySound(audio);
 
-        SetSource(audioSource, audio);
-        audioSource.transform.SetParent(transform);
-        audioSource.name = audio.name;
-        audioSource.Play();
+    }
 
-        if(!audioSource.loop)
+    private Sound GetRandomClip(Sound[] clips)
+    {
+        return clips[UnityEngine.Random.Range(0, clips.Length)];
+    }
+
+    private IEnumerator ReturnToPool(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(false);
+    }
+
+    public void ReturnToPool(Sound sound)
+    {
+
+        AudioSource audioSource = pool.Find(x => x.gameObject.name == sound.name);
+
+        if (audioSource)
         {
-            StartCoroutine(ReturnToPool(audioSource, audio.clip.length));
+            audioSource.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("No audio source with game object name " + sound.name);
         }
     }
 
-    
 }
