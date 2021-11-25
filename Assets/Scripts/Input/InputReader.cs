@@ -25,6 +25,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
     //Gameplay
     public event UnityAction<Vector2> moveEvent = delegate { };
     public event UnityAction interactEvent = delegate { };
+    public event UnityAction attackEvent = delegate { };
+    public event UnityAction attackCanceledEvent = delegate { };
 
     private void OnEnable()
     {
@@ -56,6 +58,18 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
         
     }
 
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            attackEvent.Invoke();
+        }
+        if(context.phase == InputActionPhase.Canceled)
+        {
+            attackCanceledEvent.Invoke();
+        }
+    }
+
     public void EnableGameplayInput()
     {
         gameInput.Gameplay.Enable();
@@ -69,6 +83,4 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 
         CurrentSchema = GameSchemas.None;
     }
-
-    
 }
