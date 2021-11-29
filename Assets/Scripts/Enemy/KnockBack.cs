@@ -6,30 +6,51 @@ public class KnockBack : MonoBehaviour
 {
     public float thrust;
     public float knockTime;
+    public int playerDamage = 25;
+    public int enemyDamage = 1; 
+
+    private Enemy enemy;
+    private PlayerController player;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Enemy"))
         {
-            Rigidbody2D enemy = collision.GetComponent<Rigidbody2D>();
-            if(enemy != null)
+            Rigidbody2D hit = collision.GetComponent<Rigidbody2D>();
+            if(hit != null)
             {
-                enemy.GetComponent<Entity>().currentState = EnemyState.knockBack;
-                Vector2 difference = enemy.transform.position - transform.position;
+                //Enemy hit
+                if (collision.gameObject.CompareTag("Enemy"))
+                {
+                    enemy = collision.GetComponent<Enemy>();
+
+                    if (enemy != null)
+                    {
+                        enemy.ChangeState(EnemyState.knockBack);
+                        enemy.TakeDamage(playerDamage);
+                        enemy.Knock(hit, knockTime);
+                    }
+                }
+                else if(collision.gameObject.CompareTag("Player"))
+                {
+                    player = collision.GetComponent<PlayerController>();
+
+                    if(player != null)
+                    {
+                        player.Knock(hit, knockTime);
+                        player.TakeDamage(enemyDamage);
+                    }
+                }
+
+                Vector2 difference = hit.transform.position - transform.position;
                 difference = difference.normalized * thrust;
-                enemy.AddForce(difference, ForceMode2D.Impulse);
-                StartCoroutine(KnockBackCoroutine(enemy));
+                hit.AddForce(difference, ForceMode2D.Impulse);
+
+
+
             }
         }
     }
 
-    private IEnumerator KnockBackCoroutine(Rigidbody2D enemy)
-    {
-        if(enemy != null)
-        {
-            yield return new WaitForSeconds(knockTime);
-            enemy.velocity = Vector2.zero;
-            enemy.GetComponent<Entity>().currentState = EnemyState.idle;
-        }
-    }
+    
 }

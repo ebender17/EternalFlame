@@ -353,18 +353,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b241a6a234279ef4a95f38bb6160d730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  flameLight: {fileID: 1095613492466712109}
-  minIntensityRange: 0
-  maxIntensityRange: 1
-  flickerSpeed: 0.5
-  startFlameRange: 10
-  diffuseMaterial: {fileID: 2100000, guid: bb67dd4f35adce84f84a382d67f0b074, type: 2}
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  playerData: {fileID: 11400000, guid: 519d8265f3e42f640ab5fbf18444cb30, type: 2}
   inputReader: {fileID: 11400000, guid: c3ada0d431cb94e498b1b729139db31c, type: 2}
+  flameLight: {fileID: 1095613492466712109}
+  directionalLight: {fileID: 0}
+  envLightIntesityWFlame: 0.1
+  envLightIntesityWoLight: 0.03
   startingPosition: {fileID: 11400000, guid: fd030ff6d0643c849bed3fbea21e5397, type: 2}
   _flameStaminaBarChannel: {fileID: 11400000, guid: ba531e22b1235eb42b27bceef2c19660, type: 2}
   handleFlameStaminaUpdate: {fileID: 11400000, guid: cd0ec8a39fb82094c8dcbb6b506c22b0, type: 2}
+  endingCutsceneEvent: {fileID: 11400000, guid: 8b24ee22a381d1f4280e2355db353e4f, type: 2}
 --- !u!114 &1095613493646870738
 MonoBehaviour:
   m_ObjectHideFlags: 0

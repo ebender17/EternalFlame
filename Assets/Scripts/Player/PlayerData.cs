@@ -23,4 +23,7 @@ public class PlayerData : ScriptableObject
     [Header("Attack State")]
     public float coolDown = 0.5f;
 
+    [HideInInspector] public int maxHealth = 12; //This value should be 4x the amount of hearts we have
+    [HideInInspector] public int currentHealth;
+
 }

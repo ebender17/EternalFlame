@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerStateBase
 {
+    private Vector2 velocity;
     public PlayerMoveState(PlayerController player, PlayerStateMachine stateMachine, PlayerData playerData, string animName) : base(player, stateMachine, playerData, animName)
     {
     }
@@ -22,14 +23,11 @@ public class PlayerMoveState : PlayerStateBase
     {
         base.Execute();
 
+        player.SetVelocityX(xInput * playerData.speed);
+        player.SetVelocityY(yInput * playerData.speed);
+
         player.animator.SetFloat("Horizontal", xInput);
         player.animator.SetFloat("Vertical", yInput);
-
-        /*if (rawMovement.x == 1 || rawMovement.x == -1 || rawMovement.y == 1 || rawMovement.y == -1)
-        {
-            animator.SetFloat("LastHorizontal", rawMovement.x);
-            animator.SetFloat("LastVertical", rawMovement.y);
-        }*/
 
         if(xInput == 1 || xInput == -1 || yInput == 1 || yInput == -1)
         {

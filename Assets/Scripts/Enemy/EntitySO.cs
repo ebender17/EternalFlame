@@ -6,14 +6,15 @@ using UnityEngine;
 public class EntitySO : ScriptableObject
 {
     public int health = 30;
+    public int speed = 3;
     public float knockBackHopSpeed = 10f;
 
     [Header("Check Variables")]
     public float wallCheckDistance = 0.2f; //TODO: Replace check with pathfinding
 
     [Header("Attack Variables")]
-    public float minAgroDistance = 3.0f;
-    public float maxAgroDistance = 4.0f;
+    public float minAgroDistanceRadius = 3.0f;
+    public float maxAgroDistanceRadius = 4.0f;
     public LayerMask whatIsPlayer;
     public float closeRangeActionDistance = 1.0f;
     public uint touchDamage = 5;

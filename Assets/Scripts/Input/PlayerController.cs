@@ -20,6 +20,11 @@ public class PlayerController : MonoBehaviour
     public InputReader inputReader;
 
     public Light flameLight;
+    public Light directionalLight;
+    [Range(0,1)]
+    public float envLightIntesityWFlame = 0.2f;
+    [Range(0, 1)]
+    public float envLightIntesityWoLight = 0.1f;
 
     private Rigidbody2D rb;
 
@@ -27,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    private IEnumerator flameCoroutine;
 
     private float maxFlameStamina = 100f;
 
@@ -53,11 +59,14 @@ public class PlayerController : MonoBehaviour
     #region Event Channels
     [Header("Broadcasting on")]
     [SerializeField] private FloatEventChannelSO _flameStaminaBarChannel;
+    [SerializeField] private IntEventChannelSO _heartsChannel;
 
     [Header("Listening on")]
     [SerializeField] private FlameEventChannelSO handleFlameStaminaUpdate;
+    [SerializeField] private VoidEventChannelSO endingCutsceneEvent;
     #endregion
 
+    #region Unity Functions
     private void Awake()
     {
         stateMachine = new PlayerStateMachine();
@@ -70,6 +79,7 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         handleFlameStaminaUpdate.OnEventRaised += UpdateCurrentFlameStamina;
+        endingCutsceneEvent.OnEventRaised += StopFlameStaminaUpdate;
 
         inputReader.moveEvent += OnMovement;
         inputReader.attackEvent += OnAttack;
@@ -79,6 +89,7 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         handleFlameStaminaUpdate.OnEventRaised -= UpdateCurrentFlameStamina;
+        endingCutsceneEvent.OnEventRaised -= StopFlameStaminaUpdate;
 
         inputReader.moveEvent -= OnMovement;
         inputReader.attackEvent -= OnAttack;
@@ -93,13 +104,37 @@ public class PlayerController : MonoBehaviour
 
         transform.position = startingPosition.initialValue;
 
+        playerData.currentHealth = playerData.maxHealth;
         currentFlameRange = playerData.maxFlameRange;
         currentFlameStamina = maxFlameStamina;
 
-        StartCoroutine(UpdateFlameStaminaBar(10f));
+        flameCoroutine = UpdateFlameStaminaBar(10f);
+
+        StartCoroutine(flameCoroutine);
 
         stateMachine.Initialize(idleState);
     }
+    private void Update()
+    {
+        currentVelocity = rb.velocity;
+
+        stateMachine.currentState.Execute();
+
+        if (currentFlameStamina > 0.01f)
+        {
+            flameLight.intensity = Mathf.Lerp(playerData.minIntensityRange, playerData.maxIntensityRange, Mathf.PingPong(Time.time, playerData.flickerSpeed));
+            return;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        stateMachine.currentState.ExecutePhysics();
+
+    }
+    #endregion
+
+    #region Movement
     private void OnMovement(Vector2 inputMovement)
     {
             rawMovement = inputMovement;
@@ -121,17 +156,6 @@ public class PlayerController : MonoBehaviour
             {
                 normInputY = 0;
             }
-
-            //TODO: Move to state
-            /*animator.SetFloat("Horizontal", rawMovement.x);
-            animator.SetFloat("Vertical", rawMovement.y);
-            animator.SetFloat("Speed", rawMovement.magnitude);
-
-            if (rawMovement.x == 1 || rawMovement.x == -1 || rawMovement.y == 1 || rawMovement.y == -1)
-            {
-                animator.SetFloat("LastHorizontal", rawMovement.x);
-                animator.SetFloat("LastVertical", rawMovement.y);
-            }*/
     }
 
     public void SetVelocity(Vector2 value)
@@ -146,6 +170,15 @@ public class PlayerController : MonoBehaviour
         currentVelocity = tempValue;
     }
 
+    public void SetVelocityY(float value)
+    {
+        tempValue.Set(currentVelocity.x, value);
+        rb.velocity = tempValue;
+        currentVelocity = tempValue;
+    }
+    #endregion
+
+    #region Attack
     private void OnAttack()
     {
         StartCoroutine(AttackCo());
@@ -156,21 +189,19 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator AttackCo()
     {
-        //movement = Vector2.zero;
-        //animator.SetFloat("Speed", movement.magnitude);
         animator.SetBool("Attacking", true);
-        //currentPlayerState = PlayerState.attack;
         yield return null;
         animator.SetBool("Attacking", false);
         yield return new WaitForSeconds(.33f);
-        //currentPlayerState = PlayerState.idle;
     }
 
     public void OnAttackCanceled()
     {
         attackInput = false;
     }
+    #endregion
 
+    #region Animation
     void AnimationFinishedCallback(AnimationEvent evt)
     {
         if(evt.animatorClipInfo.weight > 0.5)
@@ -178,7 +209,10 @@ public class PlayerController : MonoBehaviour
             stateMachine.currentState.AnimationFinish();
         }
     }
+    #endregion
 
+
+    #region Flame
     private IEnumerator UpdateFlameStaminaBar(float value)
     {
         while(currentFlameStamina > 0f)
@@ -199,6 +233,7 @@ public class PlayerController : MonoBehaviour
         _flameStaminaBarChannel.RaiseEvent(currentFlameStamina / 100f);
         flameLight.intensity = 0f;
         spriteRenderer.material = playerData.diffuseMaterial;
+        directionalLight.intensity = envLightIntesityWoLight;
         Debug.Log("Flame light intesity set to 0");
     }
 
@@ -221,6 +256,7 @@ public class PlayerController : MonoBehaviour
         if (oldFlameStamina < 0.01f)
         {
             spriteRenderer.material = playerData.defaultMaterial;
+            directionalLight.intensity = envLightIntesityWFlame;
             StartCoroutine(UpdateFlameStaminaBar(10f));
         }
         //We don't need to start another coroutine. Just need to update flame stamina bar right away.
@@ -234,23 +270,40 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void Update()
+    private void StopFlameStaminaUpdate()
     {
-        stateMachine.currentState.Execute();
-        //currentVelocity = rb.velocity;
-
-        if (currentFlameStamina > 0.01f)
+        if(currentFlameStamina > 0.01f)
         {
-            flameLight.intensity = Mathf.Lerp(playerData.minIntensityRange, playerData.maxIntensityRange, Mathf.PingPong(Time.time, playerData.flickerSpeed));
-            return;
+            StopCoroutine(flameCoroutine);
+        }
+    }
+    #endregion
+
+    #region Damage & Health
+    public void Knock(Rigidbody2D rigidBody, float knockTime)
+    {
+        StartCoroutine(KnockBackCoroutine(rigidBody, knockTime));
+    }
+    private IEnumerator KnockBackCoroutine(Rigidbody2D rigidBody, float knockTime)
+    {
+        if (rigidBody != null)
+        {
+            yield return new WaitForSeconds(knockTime);
+            rigidBody.velocity = Vector2.zero;
         }
     }
 
-    private void FixedUpdate()
+    public void TakeDamage(int damage)
     {
-        stateMachine.currentState.ExecutePhysics();
+        playerData.currentHealth = playerData.currentHealth - damage;
 
-        //TODO: left off here, updating movement base on rb.MovePosition vs. velocity 
-        rb.MovePosition(rb.position + rawMovement * playerData.speed * Time.deltaTime);
+        //If player is dead end game
+
+        //Update hearts in UI
+        _heartsChannel.RaiseEvent(playerData.currentHealth);
     }
+    #endregion
+
+
+
 }

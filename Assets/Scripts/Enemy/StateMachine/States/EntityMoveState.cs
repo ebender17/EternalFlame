@@ -2,17 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityMoveState : MonoBehaviour
+public class EntityMoveState : EntityState
 {
-    // Start is called before the first frame update
-    void Start()
+    protected EntityMoveStateSO moveData;
+
+    protected bool isPlayerInMinAgroRange;
+
+    public EntityMoveState(Entity entity, EntityStateMachine stateMachine, string animBoolName, EntityMoveStateSO stateData) : base(entity, stateMachine, animBoolName)
     {
-        
+        moveData = stateData;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DoChecks()
     {
-        
+        base.DoChecks();
+
+
+        isPlayerInMinAgroRange = entity.CheckPlayerInMinAgro();
     }
+
+    public override void Enter()
+    {
+        base.Enter();
+    }
+
+    public override void Execute()
+    {
+        base.Execute();
+    }
+
+    public override void ExecutePhysics()
+    {
+        base.ExecutePhysics();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
+
+    
 }

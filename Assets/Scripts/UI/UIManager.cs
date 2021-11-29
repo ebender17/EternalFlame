@@ -15,6 +15,11 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private UIInteractionManager interactionUI = default;
 
+    [SerializeField] private UIHeartsManager heartsManager = default;
+
+    [Header("Listening on")]
+    [SerializeField] private VoidEventChannelSO endingCutsceneEvent = default;
+
     private void OnEnable()
     {
         if(updateFlameStaminaEvent != null)
@@ -25,6 +30,11 @@ public class UIManager : MonoBehaviour
         if(setInteractionEvent != null)
         {
             setInteractionEvent.OnEventRaised += SetInteractionUI;
+        }
+
+        if(endingCutsceneEvent != null)
+        {
+            endingCutsceneEvent.OnEventRaised += HidePlayerHUD;
         }
     }
 
@@ -38,6 +48,11 @@ public class UIManager : MonoBehaviour
         if(setInteractionEvent != null)
         {
             setInteractionEvent.OnEventRaised -= SetInteractionUI;
+        }
+
+        if (endingCutsceneEvent != null)
+        {
+            endingCutsceneEvent.OnEventRaised -= HidePlayerHUD;
         }
     }
 
@@ -54,5 +69,12 @@ public class UIManager : MonoBehaviour
         }
 
         interactionUI.gameObject.SetActive(isOpen);
+    }
+
+    private void HidePlayerHUD()
+    {
+        HUD.gameObject.SetActive(false);
+        interactionUI.gameObject.SetActive(false);
+        heartsManager.DisableHearts();
     }
 }
