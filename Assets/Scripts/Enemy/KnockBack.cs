@@ -37,6 +37,7 @@ public class KnockBack : MonoBehaviour
 
                     if(player != null)
                     {
+                        Debug.Log("Player detected in knock back.");
                         player.Knock(hit, knockTime);
                         player.TakeDamage(enemyDamage);
                     }

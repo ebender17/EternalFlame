@@ -28,9 +28,13 @@ public class PlayerAbilityState : PlayerState
 
         if(isAbilityDone)
         {
-            if(player.currentVelocity == Vector2.zero)
+            if(player.currentVelocity.y < 0.01f && player.currentVelocity.x < 0.01f)
             {
                 stateMachine.ChangeState(player.idleState);
+            }
+            else
+            {
+                stateMachine.ChangeState(player.moveState);
             }
         }
     }

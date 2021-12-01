@@ -532,6 +532,10 @@ SpriteAtlas:
   - {fileID: -1977444329, guid: 1c7bd63c2e9c46146830ffc4f324b288, type: 3}
   - {fileID: 21300000, guid: 5f39341db9303094882b70aba6adb151, type: 3}
   - {fileID: 21300000, guid: 5279072dde142da41ae748c340864c6b, type: 3}
+  - {fileID: 2034769706, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
+  - {fileID: -1250944914, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
+  - {fileID: -1831448060, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
+  - {fileID: 1711756345, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
   - {fileID: 21300000, guid: cf0d8e3e0f9e41d4b99060ea913406e6, type: 3}
   - {fileID: 21300000, guid: 2fbcd2be53ceede4880a6cefd929d815, type: 3}
   - {fileID: 21300000, guid: 4623cc0f37c4fb84ba45671828523451, type: 3}
@@ -1018,6 +1022,10 @@ SpriteAtlas:
   - PlayerHearts_1
   - StartPressedButton
   - QuitDefaultButton
+  - chara_slime_attackleft_2
+  - chara_slime_attackleft_3
+  - chara_slime_attackleft_0
+  - chara_slime_attackleft_1
   - StartHoverButton
   - FlameStaminaBarFill
   - QuitHoverOrangeButton

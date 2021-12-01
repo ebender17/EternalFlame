@@ -15,9 +15,11 @@ MonoBehaviour:
   minIntensityRange: 0
   maxIntensityRange: 1
   flickerSpeed: 0.5
-  minFlameRange: 2
-  maxFlameRange: 10
+  minFlameRange: 5
+  maxFlameRange: 13
   diffuseMaterial: {fileID: 2100000, guid: bb67dd4f35adce84f84a382d67f0b074, type: 2}
   defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   speed: 3
   coolDown: 0.5
+  maxHealth: 12
+  currentHealth: 0

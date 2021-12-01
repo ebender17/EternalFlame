@@ -525,4 +525,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a3034e7222f3e4cb500f8ebfe177a9, type: 3}
   m_Name: TextClip
   m_EditorClassIdentifier: 
-  text: You have lost your way poor  child.
+  text: You have lost your way,  poor child.

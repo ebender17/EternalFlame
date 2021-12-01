@@ -14,17 +14,27 @@ public class PlayerController : MonoBehaviour
     public PlayerIdleState idleState { get; private set; }
     public PlayerMoveState moveState { get; private set; }
     public PlayerAttackState attackState { get; private set; }
+    public bool knockBack { get; private set; } = false;
+    public float knockBackStartTime { get; private set; }
+
+    #endregion
+
+    #region Flame
+    public Light flameLight;
+
+    public Light directionalLight;
+
+    [Range(0,1)]
+    public float envLightIntesityWFlame = 0.1f;
+
+    [Range(0, 1)]
+    public float envLightIntesityWoLight = 0.03f;
+
+    private IEnumerator flameCoroutine;
 
     #endregion
 
     public InputReader inputReader;
-
-    public Light flameLight;
-    public Light directionalLight;
-    [Range(0,1)]
-    public float envLightIntesityWFlame = 0.2f;
-    [Range(0, 1)]
-    public float envLightIntesityWoLight = 0.1f;
 
     private Rigidbody2D rb;
 
@@ -32,13 +42,6 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    private IEnumerator flameCoroutine;
-
-    private float maxFlameStamina = 100f;
-
-    private float currentFlameStamina;
-
-    private float currentFlameRange;
 
     private PlayerState currentPlayerState;
 
@@ -54,6 +57,9 @@ public class PlayerController : MonoBehaviour
 
     public bool attackInput { get; private set; }
     public bool attackInputStop { get; private set; }
+
+    private bool disableAttack = false; //Set to true when flame stamina runs to 0
+
     #endregion
 
     #region Event Channels
@@ -105,8 +111,9 @@ public class PlayerController : MonoBehaviour
         transform.position = startingPosition.initialValue;
 
         playerData.currentHealth = playerData.maxHealth;
-        currentFlameRange = playerData.maxFlameRange;
-        currentFlameStamina = maxFlameStamina;
+        playerData.currentFlameRange = playerData.maxFlameRange;
+        playerData.currentFlameStamina = playerData.maxFlameStamina;
+        directionalLight.intensity = envLightIntesityWFlame;
 
         flameCoroutine = UpdateFlameStaminaBar(10f);
 
@@ -120,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
         stateMachine.currentState.Execute();
 
-        if (currentFlameStamina > 0.01f)
+        if (playerData.currentFlameStamina > 0.01f)
         {
             flameLight.intensity = Mathf.Lerp(playerData.minIntensityRange, playerData.maxIntensityRange, Mathf.PingPong(Time.time, playerData.flickerSpeed));
             return;
@@ -181,18 +188,10 @@ public class PlayerController : MonoBehaviour
     #region Attack
     private void OnAttack()
     {
-        StartCoroutine(AttackCo());
+        if (disableAttack) return;
 
         attackInput = true;
         attackInputStop = false;
-    }
-
-    private IEnumerator AttackCo()
-    {
-        animator.SetBool("Attacking", true);
-        yield return null;
-        animator.SetBool("Attacking", false);
-        yield return new WaitForSeconds(.33f);
     }
 
     public void OnAttackCanceled()
@@ -215,54 +214,56 @@ public class PlayerController : MonoBehaviour
     #region Flame
     private IEnumerator UpdateFlameStaminaBar(float value)
     {
-        while(currentFlameStamina > 0f)
+        while(playerData.currentFlameStamina > 0f)
         {
-            _flameStaminaBarChannel.RaiseEvent(currentFlameStamina / 100f);
+            _flameStaminaBarChannel.RaiseEvent(playerData.currentFlameStamina / 100f);
 
-            currentFlameStamina = currentFlameStamina - value;
+            playerData.currentFlameStamina = playerData.currentFlameStamina - value;
 
-            currentFlameRange = currentFlameRange - 1f;
+            playerData.currentFlameRange = playerData.currentFlameRange - 1f;
 
-            flameLight.range = currentFlameRange;
+            flameLight.range = playerData.currentFlameRange;
 
             yield return new WaitForSeconds(5f);
 
         }
 
         //Update stamina bar once more so it shows it is empty. 
-        _flameStaminaBarChannel.RaiseEvent(currentFlameStamina / 100f);
+        _flameStaminaBarChannel.RaiseEvent(playerData.currentFlameStamina / 100f);
         flameLight.intensity = 0f;
         spriteRenderer.material = playerData.diffuseMaterial;
         directionalLight.intensity = envLightIntesityWoLight;
+        disableAttack = true;
         Debug.Log("Flame light intesity set to 0");
     }
 
     public void UpdateCurrentFlameStamina(FlameDataSO data)
     {
         //If we already have 100% stamina, exit
-        if (currentFlameStamina == maxFlameStamina)
+        if (playerData.currentFlameStamina == playerData.maxFlameStamina)
         {
             return;
         }
 
-        float oldFlameStamina = currentFlameStamina;
-        currentFlameStamina = currentFlameStamina + data.FlameHealth;
-        currentFlameRange = playerData.maxFlameRange * (currentFlameStamina / maxFlameStamina);
+        float oldFlameStamina = playerData.currentFlameStamina;
+        playerData.currentFlameStamina = playerData.currentFlameStamina + data.FlameHealth;
+        playerData.currentFlameRange = playerData.maxFlameRange * (playerData.currentFlameStamina / playerData.maxFlameStamina);
 
-        currentFlameStamina = Mathf.Clamp(currentFlameStamina, 0f, maxFlameStamina);
-        currentFlameRange = Mathf.Clamp(currentFlameRange, playerData.minFlameRange, playerData.maxFlameRange);
+        playerData.currentFlameStamina = Mathf.Clamp(playerData.currentFlameStamina, 0f, playerData.maxFlameStamina);
+        playerData.currentFlameRange = Mathf.Clamp(playerData.currentFlameRange, playerData.minFlameRange, playerData.maxFlameRange);
 
         //Previously the flame was out and now the flame is revived
         if (oldFlameStamina < 0.01f)
         {
             spriteRenderer.material = playerData.defaultMaterial;
             directionalLight.intensity = envLightIntesityWFlame;
+            disableAttack = false;
             StartCoroutine(UpdateFlameStaminaBar(10f));
         }
         //We don't need to start another coroutine. Just need to update flame stamina bar right away.
         else
         {
-            _flameStaminaBarChannel.RaiseEvent(currentFlameStamina / 100f);
+            _flameStaminaBarChannel.RaiseEvent(playerData.currentFlameStamina / 100f);
         }
 
 
@@ -272,7 +273,7 @@ public class PlayerController : MonoBehaviour
 
     private void StopFlameStaminaUpdate()
     {
-        if(currentFlameStamina > 0.01f)
+        if(playerData.currentFlameStamina > 0.01f)
         {
             StopCoroutine(flameCoroutine);
         }

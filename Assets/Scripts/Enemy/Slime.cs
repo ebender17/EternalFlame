@@ -15,6 +15,7 @@ public class Slime : Enemy
         base.Start();
 
         currentState = EnemyState.idle;
+        animator.SetBool("Idle", true);
         target = GameObject.FindWithTag("Player").transform;
     }
 
@@ -32,10 +33,31 @@ public class Slime : Enemy
             if(currentState == EnemyState.idle || currentState == EnemyState.walk && currentState != EnemyState.knockBack)
             {
                 Vector3 temp = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+                Vector2 newDistance = (temp - transform.position).normalized;
+                
                 rb.MovePosition(temp);
                 ChangeState(EnemyState.walk);
+                animator.SetBool("Idle", false);
+                animator.SetBool("Move", true);
+
+                animator.SetFloat("moveX", newDistance.x);
+                animator.SetFloat("moveY", newDistance.y);
+
+                if (newDistance.x == 1 || newDistance.x == -1 || newDistance.x == 1 || newDistance.x == -1)
+                {
+                    animator.SetFloat("lastHorizontal", newDistance.x);
+                    animator.SetFloat("lastVertical", newDistance.y);
+                }
             }
             
+        }
+        else if(distance <= attackRadius)
+        {
+            ChangeState(EnemyState.attack);
+            animator.SetBool("Attack", true);
+            animator.SetBool("Idle", false);
+            animator.SetBool("Move", false);
+
         }
     }
 

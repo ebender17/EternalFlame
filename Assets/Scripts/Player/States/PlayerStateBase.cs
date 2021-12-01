@@ -31,7 +31,7 @@ public class PlayerStateBase : PlayerState
         _attackInput = player.attackInput;
 
         //TODO: Transition to attack State
-        if(_attackInput)
+        if(_attackInput && player.attackState.CheckIfCanAttack())
         {
             stateMachine.ChangeState(player.attackState);
         }
