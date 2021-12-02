@@ -80,6 +80,7 @@ SpriteAtlas:
   - {fileID: -594038209, guid: 4e505400171e5d041877fce70c07475b, type: 3}
   - {fileID: -994310468, guid: 4e505400171e5d041877fce70c07475b, type: 3}
   - {fileID: 21300000, guid: 0fa6d5201b9e2054397bab5cbb50d72c, type: 3}
+  - {fileID: 21300000, guid: 7c0183d063fd21c4f82f4658acc61f75, type: 3}
   - {fileID: 21300000, guid: 44bd2dc1216ddc849a98bbe7c1df9435, type: 3}
   - {fileID: -1232521035, guid: 73e34612d0a37db4c80a438019958e99, type: 3}
   - {fileID: 2073568738, guid: 73e34612d0a37db4c80a438019958e99, type: 3}
@@ -105,6 +106,8 @@ SpriteAtlas:
   - {fileID: -710714742, guid: 0b1ab4c4956d2fd48a3ac7c97eeaad4f, type: 3}
   - {fileID: 965009464, guid: 0b1ab4c4956d2fd48a3ac7c97eeaad4f, type: 3}
   - {fileID: 21300000, guid: fda442e4135cdc246bb1d67535d19c79, type: 3}
+  - {fileID: 21300000, guid: 18b70b352328c0c41aa46f80f755ac16, type: 3}
+  - {fileID: 21300000, guid: ba266065a0a83114292b6009103e3dc2, type: 3}
   - {fileID: 21300000, guid: c1fea7a50afc3b241a2e00e7b624a0d1, type: 3}
   - {fileID: 21300000, guid: 19e9efc537f0f7745b5c60659f100961, type: 3}
   - {fileID: 1630473918, guid: 9043f7a6bfca2fc48aa3f198f84952e9, type: 3}
@@ -157,7 +160,9 @@ SpriteAtlas:
   - {fileID: -44926943, guid: 0cf7bf29a12c9694cb2a3d78b1410edf, type: 3}
   - {fileID: -1147563189, guid: 0cf7bf29a12c9694cb2a3d78b1410edf, type: 3}
   - {fileID: 1658848544, guid: 0cf7bf29a12c9694cb2a3d78b1410edf, type: 3}
+  - {fileID: 21300000, guid: 220aaa394eb613340af1f48b796b7e86, type: 3}
   - {fileID: 21300000, guid: 14775e796b81bf048a24d7c459477fd9, type: 3}
+  - {fileID: 21300000, guid: d6c4dc2a4a1800444b20035df3291d76, type: 3}
   - {fileID: 21300000, guid: 1a511cca84472864b86295d26a901e75, type: 3}
   - {fileID: 310053708, guid: 7ad1d5da33af76842aa532c300ef4888, type: 3}
   - {fileID: 721055057, guid: 7ad1d5da33af76842aa532c300ef4888, type: 3}
@@ -532,6 +537,9 @@ SpriteAtlas:
   - {fileID: -1977444329, guid: 1c7bd63c2e9c46146830ffc4f324b288, type: 3}
   - {fileID: 21300000, guid: 5f39341db9303094882b70aba6adb151, type: 3}
   - {fileID: 21300000, guid: 5279072dde142da41ae748c340864c6b, type: 3}
+  - {fileID: 1863040159, guid: 9648764d595ac664f8522fd6cbf36016, type: 3}
+  - {fileID: -2140242672, guid: 9648764d595ac664f8522fd6cbf36016, type: 3}
+  - {fileID: 75492735, guid: 9648764d595ac664f8522fd6cbf36016, type: 3}
   - {fileID: 2034769706, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
   - {fileID: -1250944914, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
   - {fileID: -1831448060, guid: 518deaedba08c1e43aba85f461bb0c84, type: 3}
@@ -570,6 +578,7 @@ SpriteAtlas:
   - Akari 1_4
   - Akari 1_9
   - StartPressedButton 1
+  - SpriteMaskCircle_big_frame
   - InteractionPill
   - AkariFrontAttack_1
   - AkariFrontAttack_0
@@ -595,6 +604,8 @@ SpriteAtlas:
   - AkariBehindAttack_0
   - AkariBehindAttack_1
   - StarttDefaultButton
+  - GameOverTextOutline
+  - GameOverTextOutline2
   - FlameStaminaBarBorder
   - QuitDefaultOrangeButton
   - chara_slime_23
@@ -647,7 +658,9 @@ SpriteAtlas:
   - PinkFlameTorch_2
   - PinkFlameTorch_1
   - PinkFlameTorch_0
+  - GameOverText
   - QuitPressedOrangeButton
+  - SpriteMaskCircle_big
   - StartHoverOrangeButton
   - chara_slime_walkleft_1
   - chara_slime_walkleft_0
@@ -1022,6 +1035,9 @@ SpriteAtlas:
   - PlayerHearts_1
   - StartPressedButton
   - QuitDefaultButton
+  - EternalFlameRestartButtons_2
+  - EternalFlameRestartButtons_0
+  - EternalFlameRestartButtons_1
   - chara_slime_attackleft_2
   - chara_slime_attackleft_3
   - chara_slime_attackleft_0

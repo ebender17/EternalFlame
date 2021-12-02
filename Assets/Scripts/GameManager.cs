@@ -4,40 +4,45 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Broadcasting on channels")]
-    [SerializeField] private BoolEventChannelSO _openUIGameEvent = default;
-    [SerializeField] private VoidEventChannelSO _onFinalCutsceneEnded;
+    //[Header("Broadcasting on channels")]
+    //[SerializeField] private BoolEventChannelSO _openUIGameEvent = default;
+    //[SerializeField] private VoidEventChannelSO _onFinalCutsceneEnded;
 
     [Header("Listening on channels")]
-    [SerializeField] private BoolEventChannelSO _gameResultEvent = default;
+    //[SerializeField] private BoolEventChannelSO _gameResultEvent = default;
+    [SerializeField] private VoidEventChannelSO _playerDeathEvent = default;
+
+    [SerializeField] private GameObject _loadScenesOnEnable;
 
     private void OnEnable()
     {
-        //picked up from Player Controller when game is won or death occurs
-        if (_gameResultEvent != null)
-            _gameResultEvent.OnEventRaised += HandleGameResult;
+        if(_playerDeathEvent != null)
+        {
+            _playerDeathEvent.OnEventRaised += HandleGameResult;
+        }
     }
 
     private void OnDisable()
     {
-        if (_gameResultEvent != null)
-            _gameResultEvent.OnEventRaised -= HandleGameResult;
+        if(_playerDeathEvent != null)
+        {
+            _playerDeathEvent.OnEventRaised -= HandleGameResult;
+        }
     }
 
-    private void HandleGameResult(bool isWon)
+    private void HandleGameResult()
     {
-        //picked up by UI Manager
-        //_openUIGameEvent.RaiseEvent(isWon, playerScore);
-
-        //TODO: start courotine and then load final end menu
-        StartCoroutine(RaiseLoadEndMenuEvent());
+        StartCoroutine(LoadGameOverMenu());
     }
 
-    IEnumerator RaiseLoadEndMenuEvent()
+    IEnumerator LoadGameOverMenu()
     {
         yield return new WaitForSeconds(5f);
 
+        if(_loadScenesOnEnable != null)
+        {
+            _loadScenesOnEnable.SetActive(true);
+        }
 
-        _onFinalCutsceneEnded.RaiseEvent();
     }
 }

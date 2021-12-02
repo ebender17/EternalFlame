@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
     [Header("Broadcasting on")]
     [SerializeField] private FloatEventChannelSO _flameStaminaBarChannel;
     [SerializeField] private IntEventChannelSO _heartsChannel;
+    [SerializeField] private VoidEventChannelSO _playerDeathChannel;
 
     [Header("Listening on")]
     [SerializeField] private FlameEventChannelSO handleFlameStaminaUpdate;
@@ -296,9 +297,17 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        playerData.currentHealth = playerData.currentHealth - damage;
+        playerData.currentHealth = Mathf.Clamp(playerData.currentHealth - damage, 0, 12);
 
         //If player is dead end game
+        if(playerData.currentHealth == 0)
+        {
+            //TODO: Raise this event after death animation plays.
+            _playerDeathChannel.RaiseEvent();
+
+            //TODO: Create Death State and play deat animation.S
+            gameObject.SetActive(false);
+        }
 
         //Update hearts in UI
         _heartsChannel.RaiseEvent(playerData.currentHealth);
