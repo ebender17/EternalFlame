@@ -10,6 +10,7 @@ public class EntityState
     protected float startTime;
 
     protected string animBoolName;
+    protected bool isAnimationFinished;
 
     public EntityState(Entity entity, EntityStateMachine stateMachine, string animBoolName)
     {
@@ -31,16 +32,22 @@ public class EntityState
 
     public virtual void Execute()
     {
-
+        DoChecks();
     }
 
     public virtual void ExecutePhysics()
     {
-        DoChecks();
+        //DoChecks();
     }
 
     public virtual void DoChecks()
     {
 
+    }
+
+    public virtual void AnimationFinish()
+    {
+        Debug.Log("Inside Animation Finsihed in Entity State");
+        isAnimationFinished = true;
     }
 }

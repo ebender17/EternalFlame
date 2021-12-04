@@ -33,9 +33,9 @@ public class PlayerData : ScriptableObject
     public LayerMask whatIsDamagable;
     public int attackHitDamage = 1; //Enemy health is measured by number of hits
 
-    [Header("Knockback")]
+    [Header("Knockback for enemies")]
     public float knockBackDuration = 0.2f;
-    public float knockBackSpeed = 3f;
+    public float knockBackThrust = 3f;
 
 
 }

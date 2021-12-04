@@ -22,13 +22,6 @@ public class PlayerController : MonoBehaviour
     #region Flame
     public Light flameLight;
 
-    public Light directionalLight;
-
-    [Range(0,1)]
-    public float envLightIntesityWFlame = 0.1f;
-
-    [Range(0, 1)]
-    public float envLightIntesityWoLight = 0.03f;
 
     private IEnumerator flameCoroutine;
 
@@ -47,6 +40,9 @@ public class PlayerController : MonoBehaviour
 
     public VectorValue startingPosition;
 
+    public bool isInvincible { get; private set; } = false;
+    private float invincibleTimer;
+
     #region Input
     private Vector2 rawMovement;
     public int normInputX { get; private set; }
@@ -59,6 +55,7 @@ public class PlayerController : MonoBehaviour
     public bool attackInputStop { get; private set; }
 
     private bool disableAttack = false; //Set to true when flame stamina runs to 0
+
 
     #endregion
 
@@ -114,7 +111,6 @@ public class PlayerController : MonoBehaviour
         playerData.currentHealth = playerData.maxHealth;
         playerData.currentFlameRange = playerData.maxFlameRange;
         playerData.currentFlameStamina = playerData.maxFlameStamina;
-        directionalLight.intensity = envLightIntesityWFlame;
 
         flameCoroutine = UpdateFlameStaminaBar(10f);
 
@@ -127,6 +123,8 @@ public class PlayerController : MonoBehaviour
         currentVelocity = rb.velocity;
 
         stateMachine.currentState.Execute();
+
+        CheckInvincible();
 
         if (playerData.currentFlameStamina > 0.01f)
         {
@@ -233,7 +231,6 @@ public class PlayerController : MonoBehaviour
         _flameStaminaBarChannel.RaiseEvent(playerData.currentFlameStamina / 100f);
         flameLight.intensity = 0f;
         spriteRenderer.material = playerData.diffuseMaterial;
-        directionalLight.intensity = envLightIntesityWoLight;
         disableAttack = true;
         Debug.Log("Flame light intesity set to 0");
     }
@@ -257,7 +254,6 @@ public class PlayerController : MonoBehaviour
         if (oldFlameStamina < 0.01f)
         {
             spriteRenderer.material = playerData.defaultMaterial;
-            directionalLight.intensity = envLightIntesityWFlame;
             disableAttack = false;
             StartCoroutine(UpdateFlameStaminaBar(10f));
         }
@@ -295,8 +291,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void CheckInvincible()
+    {
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+                isInvincible = false;
+        }
+    }
     public void TakeDamage(int damage)
     {
+        if (isInvincible) return;
+
+        isInvincible = true;
+        invincibleTimer = playerData.timeInvincible;
+       
         playerData.currentHealth = Mathf.Clamp(playerData.currentHealth - damage, 0, 12);
 
         //If player is dead end game

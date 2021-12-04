@@ -33,15 +33,15 @@ public class PatrolChase_Move : EntityMoveState
         base.Execute();
         Debug.Log("Move spot" + enemy.moveSpot.position);
 
-        Vector2 direction = enemy.moveSpot.position - entity.aliveGO.transform.position;
+        Vector2 direction = enemy.moveSpot.position - entity.transform.position;
         Debug.Log("Direction before normalization " + direction);
         direction.Normalize();
         entity.animator.SetFloat("moveX", direction.x);
         entity.animator.SetFloat("moveY", direction.y);
 
-        entity.aliveGO.transform.position = Vector2.MoveTowards(entity.aliveGO.transform.position, enemy.moveSpot.position, moveData.speed * Time.deltaTime);
+        entity.transform.position = Vector2.MoveTowards(entity.transform.position, enemy.moveSpot.position, moveData.speed * Time.deltaTime);
 
-        if(Vector2.Distance(entity.aliveGO.transform.position, enemy.moveSpot.position) < 0.2f)
+        if(Vector2.Distance(entity.transform.position, enemy.moveSpot.position) < 0.2f)
         {
             stateMachine.ChangeState(enemy.idleState);
         }

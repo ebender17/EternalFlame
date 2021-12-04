@@ -6,9 +6,10 @@ public class EntityIdleState : EntityState
 {
     protected EntityIdleStateSO idleData;
 
-    protected bool isIdleTimeOver;
+    //TODO: Have enemies only idle for a period of time and then move again (use the documented out code here). Leaving at idle for now so I can get stuff done.
+    //protected bool isIdleTimeOver;
 
-    protected float idleTime;
+    //protected float idleTime;
 
     protected bool isPlayerInMinAgroRange;
 
@@ -29,8 +30,8 @@ public class EntityIdleState : EntityState
         base.Enter();
 
         entity.SetVelocity(Vector2.zero);
-        isIdleTimeOver = false;
-        SetRandomIdleTime();
+        //isIdleTimeOver = false;
+        //SetRandomIdleTime();
 
     }
 
@@ -38,10 +39,10 @@ public class EntityIdleState : EntityState
     {
         base.Execute();
 
-        if(Time.time >= startTime + idleTime)
+        /*if(Time.time >= startTime + idleTime)
         {
             isIdleTimeOver = true;
-        }
+        }*/
     }
 
     public override void ExecutePhysics()
@@ -54,8 +55,8 @@ public class EntityIdleState : EntityState
         base.Exit();
     }
 
-    private void SetRandomIdleTime()
+    /*private void SetRandomIdleTime()
     {
         idleTime = Random.Range(idleData.minIdleTime, idleData.maxIdleTime);
-    }
+    }*/
 }

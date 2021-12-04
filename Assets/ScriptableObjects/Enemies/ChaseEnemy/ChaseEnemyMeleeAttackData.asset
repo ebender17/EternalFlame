@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d01d57892de1dfa42b465c4bda9969ff, type: 3}
+  m_Name: ChaseEnemyMeleeAttackData
+  m_EditorClassIdentifier: 
+  attackRadius: 0.5
+  attackDamage: 2
+  attackCoolDown: 1
+  knockDuration: 0.3
+  knockThrust: 7

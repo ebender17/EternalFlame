@@ -12,14 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad1b940bd23898548bc82da40170f507, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  minIntensityRange: 0
-  maxIntensityRange: 1
+  maxHealth: 12
+  currentHealth: 12
+  timeInvincible: 2
+  minIntensityRange: 1
+  maxIntensityRange: 2
   flickerSpeed: 0.5
-  minFlameRange: 5
-  maxFlameRange: 13
+  minFlameRange: 100
+  maxFlameRange: 200
+  maxFlameStamina: 100
+  currentFlameStamina: 80
+  currentFlameRange: 198
   diffuseMaterial: {fileID: 2100000, guid: bb67dd4f35adce84f84a382d67f0b074, type: 2}
   defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  speed: 3
+  speed: 4
   coolDown: 0.5
-  maxHealth: 12
-  currentHealth: 0
+  whatIsDamagable:
+    serializedVersion: 2
+    m_Bits: 0
+  attackHitDamage: 1
+  knockBackDuration: 0.2
+  knockBackThrust: 3

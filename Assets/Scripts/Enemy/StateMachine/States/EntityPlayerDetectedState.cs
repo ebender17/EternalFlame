@@ -2,17 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityPlayerDetectedState : MonoBehaviour
+public class EntityPlayerDetectedState : EntityState
 {
-    // Start is called before the first frame update
-    void Start()
+    protected bool isPlayerInMinAgroRange;
+    protected bool isPlayerInMaxAgroRange;
+    protected bool performLongRangeAction;
+    protected bool performCloseRangeAction;
+
+    protected EntityDetectionStateSO detectionData;
+    public EntityPlayerDetectedState(Entity entity, EntityStateMachine stateMachine, string animBoolName, EntityDetectionStateSO stateData) : base(entity, stateMachine, animBoolName)
     {
-        
+        detectionData = stateData;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DoChecks()
     {
-        
+        base.DoChecks();
+
+        isPlayerInMinAgroRange = entity.CheckPlayerInMinAgro();
+        performCloseRangeAction = entity.CheckPlayerInCloseRangeAction();
+
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+
+        entity.SetVelocityX(0);
+        entity.SetVelocityY(0);
+    }
+
+    public override void Execute()
+    {
+        base.Execute();
+
+    }
+
+    public override void ExecutePhysics()
+    {
+        base.ExecutePhysics();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
     }
 }

@@ -10,33 +10,27 @@ public class Entity : MonoBehaviour
 
     public Rigidbody2D rb { get; private set; }
     public Animator animator { get; private set; }
-    public GameObject aliveGO { get; private set; }
 
-    //[SerializeField] private Transform _wallCheck;
-    //[SerializeField] private Transform _ledgeCheck;
+    //[SerializeField] private Transform _playerCheck;
 
-    [SerializeField] private Transform _playerCheck;
-    //[SerializeField] private Transform _groundCheck;
-
-    public Vector2 facingDirection { get; private set; }
     private Vector2 tempVelocity;
+
+    public Transform target;
 
     private int currentHealth;
     private float currentStunResistance;
     private float lastDamageTime;
     protected bool isStunned; //flag used to transition in enemy specific stun state
     protected bool isDead; //flag used to transition in enemy specific dead state
-    public int lastDamageDirection { get; private set; }
 
+    
     public virtual void Start()
     {
-        facingDirection = Vector2.zero;
         currentHealth = entityData.health;
         currentStunResistance = entityData.stunResistance;
 
-        aliveGO = transform.Find("Alive").gameObject;
-        rb = aliveGO.GetComponent<Rigidbody2D>();
-        animator = aliveGO.GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         stateMachine = new EntityStateMachine();
     }
@@ -45,16 +39,16 @@ public class Entity : MonoBehaviour
     {
         stateMachine.currentState.Execute();
 
-        //animator.SetFloat("moveX", rb.velocity.x);
-        //animator.SetFloat("moveY", rb.velocity.y);
+        //TODO: Need to set y velocity in animator?
 
         if (Time.time >= lastDamageTime + entityData.stunRecoveryTime && isStunned)
+        {
             ResetStunResistance();
+        }
     }
 
     public virtual void FixedUpdate()
     {
-
         stateMachine.currentState.ExecutePhysics();
     }
 
@@ -85,19 +79,28 @@ public class Entity : MonoBehaviour
 
     public virtual bool CheckPlayerInMinAgro()
     {
-        return Physics2D.OverlapCircle(_playerCheck.position, entityData.minAgroDistanceRadius, entityData.whatIsPlayer);
+        float distance = Vector3.Distance(target.position, transform.position);
+
+        return distance <= entityData.minAgroDistanceRadius && distance > entityData.closeRangeActionDistance;
     }
 
-    public virtual void Flip()
+    public virtual bool CheckPlayerInCloseRangeAction()
     {
-        facingDirection *= -1;
-        aliveGO.transform.Rotate(0f, 180f, 0f);
+        float distance = Vector3.Distance(target.position, transform.position);
+        return distance <= entityData.closeRangeActionDistance;
     }
 
-    public virtual void DamageHop(float velocity)
+    void AnimationFinishedCallback(AnimationEvent evt)
     {
-        tempVelocity.Set(rb.velocity.x, velocity);
-        rb.velocity = tempVelocity;
+        if (evt.animatorClipInfo.weight > 0.5)
+        {
+            stateMachine.currentState.AnimationFinish();
+        }
+    }
+
+    public void FinishedAnimation()
+    {
+        stateMachine.currentState.AnimationFinish();
     }
 
     public virtual void ResetStunResistance()
@@ -106,21 +109,24 @@ public class Entity : MonoBehaviour
         currentStunResistance = entityData.stunResistance;
     }
 
-    public virtual void TakeDamage(float playerXPox, int damage)
+    public void Knock(Rigidbody2D rigidBody, float knockTime)
+    {
+        StartCoroutine(KnockBackCoroutine(rigidBody, knockTime));
+    }
+    private IEnumerator KnockBackCoroutine(Rigidbody2D rigidBody, float knockTime)
+    {
+        if (rigidBody != null)
+        {
+            yield return new WaitForSeconds(knockTime);
+            rigidBody.velocity = Vector2.zero;
+        }
+    }
+
+    public virtual void TakeDamage(int damage)
     {
         lastDamageTime = Time.time;
         currentStunResistance--;
         currentHealth -= damage;
-
-
-        if (playerXPox > aliveGO.transform.position.x)
-        {
-            lastDamageDirection = -1;
-        }
-        else
-        {
-            lastDamageDirection = 1;
-        }
 
         if (currentStunResistance <= 0)
             isStunned = true;
@@ -128,4 +134,13 @@ public class Entity : MonoBehaviour
         if (currentHealth <= 0)
             isDead = true;
     }
+
+#if UNITY_EDITOR
+    public virtual void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, entityData.closeRangeActionDistance);
+        Gizmos.DrawWireSphere(transform.position, entityData.minAgroDistanceRadius);
+    }
+
+#endif
 }

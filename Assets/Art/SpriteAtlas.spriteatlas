@@ -106,6 +106,10 @@ SpriteAtlas:
   - {fileID: -710714742, guid: 0b1ab4c4956d2fd48a3ac7c97eeaad4f, type: 3}
   - {fileID: 965009464, guid: 0b1ab4c4956d2fd48a3ac7c97eeaad4f, type: 3}
   - {fileID: 21300000, guid: fda442e4135cdc246bb1d67535d19c79, type: 3}
+  - {fileID: 1080002108, guid: 48a2a4f4c011c6145ab41e34354cbeb8, type: 3}
+  - {fileID: -1299467265, guid: 48a2a4f4c011c6145ab41e34354cbeb8, type: 3}
+  - {fileID: -1710753838, guid: 48a2a4f4c011c6145ab41e34354cbeb8, type: 3}
+  - {fileID: 1071444239, guid: 48a2a4f4c011c6145ab41e34354cbeb8, type: 3}
   - {fileID: 21300000, guid: 18b70b352328c0c41aa46f80f755ac16, type: 3}
   - {fileID: 21300000, guid: ba266065a0a83114292b6009103e3dc2, type: 3}
   - {fileID: 21300000, guid: c1fea7a50afc3b241a2e00e7b624a0d1, type: 3}
@@ -154,6 +158,9 @@ SpriteAtlas:
   - {fileID: -323071533, guid: 9043f7a6bfca2fc48aa3f198f84952e9, type: 3}
   - {fileID: 21300000, guid: 1876b2c66f665cd42a5ff4807e964601, type: 3}
   - {fileID: 21300000, guid: ec512157fe14c3742b2aa5a323ef0a0a, type: 3}
+  - {fileID: 682150896, guid: f96140a85ea12ae4f878514fbf303abc, type: 3}
+  - {fileID: -1276874047, guid: f96140a85ea12ae4f878514fbf303abc, type: 3}
+  - {fileID: 1571576227, guid: f96140a85ea12ae4f878514fbf303abc, type: 3}
   - {fileID: 21300000, guid: 618c5a29929f9d04080c33d8cfa2c27f, type: 3}
   - {fileID: -856535753, guid: 0cf7bf29a12c9694cb2a3d78b1410edf, type: 3}
   - {fileID: 963388025, guid: 0cf7bf29a12c9694cb2a3d78b1410edf, type: 3}
@@ -163,6 +170,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 220aaa394eb613340af1f48b796b7e86, type: 3}
   - {fileID: 21300000, guid: 14775e796b81bf048a24d7c459477fd9, type: 3}
   - {fileID: 21300000, guid: d6c4dc2a4a1800444b20035df3291d76, type: 3}
+  - {fileID: -804048377, guid: d74b7f9a19b033e418741bad459f86c3, type: 3}
+  - {fileID: -686656195, guid: d74b7f9a19b033e418741bad459f86c3, type: 3}
+  - {fileID: 368194915, guid: d74b7f9a19b033e418741bad459f86c3, type: 3}
+  - {fileID: -1813015601, guid: d74b7f9a19b033e418741bad459f86c3, type: 3}
   - {fileID: 21300000, guid: 1a511cca84472864b86295d26a901e75, type: 3}
   - {fileID: 310053708, guid: 7ad1d5da33af76842aa532c300ef4888, type: 3}
   - {fileID: 721055057, guid: 7ad1d5da33af76842aa532c300ef4888, type: 3}
@@ -523,6 +534,10 @@ SpriteAtlas:
   - {fileID: -611924254, guid: 90b3df9bf294581429b1ef128e81df7f, type: 3}
   - {fileID: 405898194, guid: 90b3df9bf294581429b1ef128e81df7f, type: 3}
   - {fileID: -1834683365, guid: 90b3df9bf294581429b1ef128e81df7f, type: 3}
+  - {fileID: -2095299706, guid: ac1eb7bbe50d28744a27bbadc88be904, type: 3}
+  - {fileID: 56091304, guid: ac1eb7bbe50d28744a27bbadc88be904, type: 3}
+  - {fileID: 451010551, guid: ac1eb7bbe50d28744a27bbadc88be904, type: 3}
+  - {fileID: -2003432452, guid: ac1eb7bbe50d28744a27bbadc88be904, type: 3}
   - {fileID: 21300000, guid: 66c4e1fbc965db44db6243b80e02d398, type: 3}
   - {fileID: 1071485874, guid: f983060c7adaf1b4f9816cb84f0a7ea2, type: 3}
   - {fileID: 686850109, guid: f983060c7adaf1b4f9816cb84f0a7ea2, type: 3}
@@ -547,6 +562,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cf0d8e3e0f9e41d4b99060ea913406e6, type: 3}
   - {fileID: 21300000, guid: 2fbcd2be53ceede4880a6cefd929d815, type: 3}
   - {fileID: 21300000, guid: 4623cc0f37c4fb84ba45671828523451, type: 3}
+  - {fileID: -1556923880, guid: 1899d4cf19477c6408b1a4c38f2003ce, type: 3}
+  - {fileID: 1559875356, guid: 1899d4cf19477c6408b1a4c38f2003ce, type: 3}
+  - {fileID: 2023983860, guid: 1899d4cf19477c6408b1a4c38f2003ce, type: 3}
+  - {fileID: 1487881386, guid: 1899d4cf19477c6408b1a4c38f2003ce, type: 3}
   m_PackedSpriteNamesToIndex:
   - Akari 1_8
   - Akari 1_23
@@ -604,6 +623,10 @@ SpriteAtlas:
   - AkariBehindAttack_0
   - AkariBehindAttack_1
   - StarttDefaultButton
+  - chara_slimestunRight_0
+  - chara_slimestunRight_1
+  - chara_slimestunRight_2
+  - chara_slimestunRight_3
   - GameOverTextOutline
   - GameOverTextOutline2
   - FlameStaminaBarBorder
@@ -652,6 +675,9 @@ SpriteAtlas:
   - chara_slime_22
   - StartPressedOrangeButton
   - QuitPressedButton
+  - Chara_slime_idleleft_0
+  - Chara_slime_idleleft_1
+  - Chara_slime_idleleft_2
   - StartDefaultOrangeButton
   - PinkFlameTorch_4
   - PinkFlameTorch_3
@@ -661,6 +687,10 @@ SpriteAtlas:
   - GameOverText
   - QuitPressedOrangeButton
   - SpriteMaskCircle_big
+  - chara_slimestunFront_3
+  - chara_slimestunFront_2
+  - chara_slimestunFront_1
+  - chara_slimestunFront_0
   - StartHoverOrangeButton
   - chara_slime_walkleft_1
   - chara_slime_walkleft_0
@@ -1021,6 +1051,10 @@ SpriteAtlas:
   - DungeonTileset_230
   - DungeonTileset_228
   - DungeonTileset_229
+  - chara_slimestunBack_1
+  - chara_slimestunBack_0
+  - chara_slimestunBack_3
+  - chara_slimestunBack_2
   - QuitHoverButton
   - OrangeFlameTorch_4
   - OrangeFlameTorch_1
@@ -1045,6 +1079,10 @@ SpriteAtlas:
   - StartHoverButton
   - FlameStaminaBarFill
   - QuitHoverOrangeButton
+  - chara_slimestunLeft_3
+  - chara_slimestunLeft_2
+  - chara_slimestunLeft_1
+  - chara_slimestunLeft_0
   m_RenderDataMap: {}
   m_Tag: SpriteAtlas
   m_IsVariant: 0

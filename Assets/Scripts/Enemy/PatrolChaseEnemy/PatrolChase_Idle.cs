@@ -29,10 +29,10 @@ public class PatrolChase_Idle : EntityIdleState
         {
             //TODO: Change to attack state
         }
-        else if(isIdleTimeOver)
+        /*else if(isIdleTimeOver)
         {
             stateMachine.ChangeState(enemy.moveState);
-        }
+        }*/
     }
 
     public override void ExecutePhysics()

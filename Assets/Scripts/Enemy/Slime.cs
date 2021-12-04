@@ -33,7 +33,7 @@ public class Slime : Enemy
             if(currentState == EnemyState.idle || currentState == EnemyState.walk && currentState != EnemyState.knockBack)
             {
                 Vector3 temp = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
-                Vector2 newDistance = (temp - transform.position).normalized;
+                Vector3 newDistance = (temp - transform.position).normalized;
                 
                 rb.MovePosition(temp);
                 ChangeState(EnemyState.walk);
